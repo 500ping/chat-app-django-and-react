@@ -29,25 +29,16 @@ class Chat extends React.Component {
                     return
                 } else {
                     console.log('waiting for connection...')
-                    component.waitForSockerConnection(callback)
+                    component.waitForSocketConnection(callback)
                 }
             }, 100
         )
     }
 
     addMessage(message) {
-        if (!this.state.messages) {
-            this.setState({
-                messages: [message]
-            })
-        } else {
-            this.setState({
-                messages: [...this.state.messages, message]
-            })
-        }
-        // this.setState({
-        //     messages: [...this.state.messages, message]
-        // })
+        this.setState({
+            messages: [...this.state.messages, message]
+        })
     }
 
     setMessages(messages) {
