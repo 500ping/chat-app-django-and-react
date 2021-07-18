@@ -3,7 +3,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #27ae60;
+    background: white;
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     font-size: 1em;
     letter-spacing: 0.1px;
@@ -353,7 +353,7 @@ body {
 #frame #sidepanel #search input {
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     padding: 10px 0 10px 46px;
-    width: calc(100% - 25px);
+    width: 100%;
     border: none;
     background: #32465a;
     color: #f5f5f5;
@@ -757,6 +757,7 @@ body {
     color: #435f7a;
     opacity: .5;
     cursor: pointer;
+    padding: 5px;
 }
 
 @media screen and (max-width: 735px) {
@@ -774,7 +775,7 @@ body {
     float: right;
     border: none;
     width: 50px;
-    padding: 12px 0;
+    padding: 15px 0;
     cursor: pointer;
     background: #32465a;
     color: #f5f5f5;
