@@ -1,20 +1,38 @@
 import React from 'react'
-
-import Chat from './Chat'
+import { connect } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
+import * as actions from '../store/actions/auth'
+import BaseRouter from '../routes'
+import Sidepanel from './Sidepanel'
+import Profile from './Profile'
 import WebSocketInstance from '../websocket'
-
 
 class App extends React.Component {
 
     componentDidMount() {
+        this.props.onTryAutoSignup()
         WebSocketInstance.connect()
     }
 
-    render () {
+    render() {
         return (
-            <Chat />
+            <Router>
+                <div id="frame">
+                    <Sidepanel />
+                    <div className="content">
+                        <Profile />
+                        <BaseRouter />
+                    </div>
+                </div>
+            </Router>
         )
     }
 }
 
-export default App
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryAutoSignup: () => dispatch(actions.authCheckState())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(App)
