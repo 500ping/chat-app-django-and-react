@@ -62,7 +62,8 @@ class Chat extends React.Component {
         return messages.map((message, i, arr) => (
             <li
                 key={message.id}
-                style={{ marginBottom: arr.length - 1 === i ? "300px" : "15px" }}
+                // style={{ marginBottom: arr.length - 1 === i ? "300px" : "15px" }}
+                style={{ padding: arr.length - 1 === i ? "0 0 100px 0" : "0" }}
                 className={message.author === currentUser ? 'sent' : 'replies'}>
                 <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
                 <p>{message.content}

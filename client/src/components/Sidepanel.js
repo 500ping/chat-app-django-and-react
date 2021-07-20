@@ -3,6 +3,7 @@ import { Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
 import * as actions from '../store/actions/auth'
+import axios from 'axios'
 
 import Contact from './Contact'
 
@@ -12,7 +13,29 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
 class Sidepanel extends React.Component {
 
     state = {
+        chats: [],
         loginForm: true,
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.token !== null && newProps.username !== null) {
+            this.getUserChats(newProps.token, newProps.username);
+        }
+    }
+
+    getUserChats = (token, username) => {
+        axios.defaults.headers = {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`
+        };
+
+        axios.get(`http://127.0.0.1:8000/chat/?username=${username}`)
+        .then(res => {
+            console.log(res.data);
+            this.setState({
+                chats: res.data
+            });
+        });
     }
 
     changeForm = () => {
@@ -37,6 +60,17 @@ class Sidepanel extends React.Component {
     }
 
     render() {
+        const activeChats = this.state.chats.map(c => {
+            return (
+                <Contact 
+                    key={c.id}
+                    name="Harvey Specter" 
+                    picURL="http://emilcarlsson.se/assets/louislitt.png"
+                    status="busy"
+                    chatURL={`/${c.id}`} />
+            )
+        })
+
         return (
             <div id="sidepanel">
                 <div id="profile">
@@ -101,18 +135,7 @@ class Sidepanel extends React.Component {
                 </div>
                 <div id="contacts">
                     <ul>
-                        <Contact 
-                            name="Demo1"
-                            status="online"
-                            picURL="http://emilcarlsson.se/assets/louislitt.png"
-                            chatURL="/demo"
-                        />
-                        <Contact 
-                            name="Demo2"
-                            status="active"
-                            picURL="http://emilcarlsson.se/assets/harveyspecter.png"
-                            chatURL="/demo2"
-                        />
+                        { activeChats }
                     </ul>
                 </div>
                 <div id="bottom-bar">
@@ -127,7 +150,9 @@ class Sidepanel extends React.Component {
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.token !== null,
-        loading: state.loading
+        loading: state.loading,
+        token: state.token,
+        username: state.username
     }
 }
 
