@@ -5,13 +5,11 @@ import * as actions from '../store/actions/auth'
 import BaseRouter from '../routes'
 import Sidepanel from './Sidepanel'
 import Profile from './Profile'
-import WebSocketInstance from '../websocket'
 
 class App extends React.Component {
 
     componentDidMount() {
         this.props.onTryAutoSignup()
-        WebSocketInstance.connect()
     }
 
     render() {

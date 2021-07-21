@@ -29,6 +29,3 @@ class Chat(models.Model):
     def __str__(self):
         return f'{self.pk}'
 
-    def last_10_messages(self):
-        return self.messages.objects.order_by('-timestamp').all()[:10]
-

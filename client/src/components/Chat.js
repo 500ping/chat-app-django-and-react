@@ -5,14 +5,28 @@ import { connect } from 'react-redux';
 
 
 class Chat extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {message: ''}
 
+    state = {message: ''}
+
+    initialiseChat() {
+        WebSocketInstance.connect(this.props.match.params.chatID)
         this.waitForSocketConnection(() => {
             WebSocketInstance.addCallbacks(this.setMessages.bind(this), this.addMessage.bind(this))
-            WebSocketInstance.fetchMessages(this.props.currentUser)
+            WebSocketInstance.fetchMessages(
+                this.props.currentUser,
+                this.props.match.params.chatID
+            )
+            
         })
+    }
+
+    constructor(props) {
+        super(props)
+        this.initialiseChat()
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.initialiseChat()
     }
 
     waitForSocketConnection(callback) {
