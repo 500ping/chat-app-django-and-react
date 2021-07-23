@@ -15,7 +15,6 @@ class WebSocketService {
 
     connect(chatUrl) {
         const path = `ws://127.0.0.1:8000/ws/chat/${chatUrl}/`
-        console.log(path)
         this.socketRef = new WebSocket(path)
         this.socketRef.onopen = () => {
             console.log('WebSocket open')
@@ -30,6 +29,10 @@ class WebSocketService {
             console.log("WebSocket closed let's reopen")
             this.connect()
         }
+    }
+
+    disconnect() {
+        this.socketRef.close()
     }
 
     socketNewMessage(data) {
@@ -58,7 +61,8 @@ class WebSocketService {
         this.sendMessage({
             command: 'new_message',
             from: message.from,
-            message: message.content
+            message: message.content,
+            chatId: message.chatId
         })
     }
 

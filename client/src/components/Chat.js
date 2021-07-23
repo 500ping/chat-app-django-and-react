@@ -13,10 +13,9 @@ class Chat extends React.Component {
         this.waitForSocketConnection(() => {
             WebSocketInstance.addCallbacks(this.setMessages.bind(this), this.addMessage.bind(this))
             WebSocketInstance.fetchMessages(
-                this.props.currentUser,
+                this.props.username,
                 this.props.match.params.chatID
             )
-            
         })
     }
 
@@ -26,7 +25,16 @@ class Chat extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.initialiseChat()
+        if (this.props.match.params.chatID !== newProps.match.params.chatID) {
+            WebSocketInstance.disconnect()
+            WebSocketInstance.connect(newProps.match.params.chatID)
+            this.waitForSocketConnection(() => {
+                WebSocketInstance.fetchMessages(
+                    newProps.username,
+                    newProps.match.params.chatID
+                )
+            })
+        }
     }
 
     waitForSocketConnection(callback) {
@@ -61,8 +69,9 @@ class Chat extends React.Component {
     sendMessageHandler = (e) => {
         e.preventDefault()
         const messageObject = {
-            from: "500ping",
+            from: this.props.username,
             content: this.state.message,
+            chatId: this.props.match.params.chatID
         }
         WebSocketInstance.newChatMessage(messageObject)
         this.setState({
